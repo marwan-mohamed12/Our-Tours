@@ -7,31 +7,57 @@ const url = "https://course-api.com/react-tours-project";
 function App() {
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
-    const [tours, setTours] = useState(null);
+    const [tours, setTours] = useState([]);
+
+    const fetchData = async () => {
+        setIsLoading(true);
+        try {
+            const resp = await fetch(url);
+
+            if (!resp.ok) {
+                setIsLoading(false);
+                setIsError(true);
+                return;
+            }
+
+            const tours = await resp.json();
+            setTours(tours);
+        } catch (error) {
+            setIsLoading(false);
+            setIsError(true);
+        }
+        setIsLoading(false);
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const resp = await fetch(url);
-
-                if (!resp.ok) {
-                    setIsLoading(false);
-                    setIsError(true);
-                    return;
-                }
-
-                const tours = await resp.json();
-                setTours(tours);
-            } catch (error) {
-                setIsError(true);
-            }
-            setIsLoading(false);
-        };
         fetchData();
     }, []);
 
     if (isLoading) {
-        return <Loading />;
+        return (
+            <main>
+                <Loading />
+            </main>
+        );
+    }
+
+    if (tours.length === 0) {
+        return (
+            <main>
+                <section>
+                    <div className="title">
+                        <h2>No Tours Left</h2>
+                        <button
+                            type="button"
+                            className="btn"
+                            onClick={fetchData}
+                        >
+                            Refresh
+                        </button>
+                    </div>
+                </section>
+            </main>
+        );
     }
 
     if (isError) {

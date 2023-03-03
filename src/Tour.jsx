@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Tour = ({ id, name, info, image, price, maxLength, removeTour }) => {
+const Tour = ({ id, name, info, image, price, removeTour }) => {
     const [toggle, setToggel] = useState(false);
 
     return (
@@ -10,7 +10,7 @@ const Tour = ({ id, name, info, image, price, maxLength, removeTour }) => {
                 <span className="tour-price">${price}</span>
                 <h4>{name}</h4>
                 <p>
-                    {toggle ? info : `${info.slice(0, maxLength)}...`}
+                    {toggle ? info : `${info.slice(0, 230)}...`}
                     <button onClick={() => setToggel(!toggle)}>
                         {toggle ? "Show Less" : "read more"}
                     </button>
